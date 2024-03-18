@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface returnValues {
   periodLength: number;
   trainingDays: number;
@@ -28,4 +30,30 @@ const calculateExercises = (daily: number[], target: number): returnValues => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  if (process.argv.length < 4) {
+    throw new Error("Not enough arguments");
+  }
+
+  if (isNotNumber(process.argv[2])) {
+    throw new Error(`Invalid argument - ${process.argv[2]} is not a number`);
+  }
+
+  const target = Number(process.argv[2]);
+
+  const days = process.argv.slice(3).map((d) => {
+    if (isNotNumber(d)) {
+      throw new Error(`Invalid argument - ${d} is not a number`);
+    } else {
+      return Number(d);
+    }
+  });
+
+  console.log(calculateExercises(days, target));
+} catch (error: unknown) {
+  let errMessage = "An error occured:";
+  if (error instanceof Error) {
+    errMessage += error.message;
+  }
+  console.log(errMessage);
+}
