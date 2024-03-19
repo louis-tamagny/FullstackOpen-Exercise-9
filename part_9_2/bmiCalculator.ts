@@ -1,6 +1,6 @@
 import { isNotNumber } from "./utils";
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   if (isNotNumber(height) || isNotNumber(weight)) {
     throw new Error("Arguments are not valid numbers");
   }
