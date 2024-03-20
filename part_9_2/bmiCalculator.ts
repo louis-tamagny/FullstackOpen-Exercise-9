@@ -15,13 +15,3 @@ export const calculateBmi = (height: number, weight: number): string => {
     return "Obese";
   }
 };
-
-try {
-  console.log(calculateBmi(Number(process.argv[2]), Number(process.argv[3])));
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log("Error message: " + error.message);
-  } else {
-    console.log("unexpected error");
-  }
-}
