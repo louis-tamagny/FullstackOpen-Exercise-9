@@ -1,4 +1,5 @@
 import express from "express";
+import diagnosesRouter from "./routes/diagnoses";
 const app = express();
 
 app.use((_req, res, next) => {
@@ -9,6 +10,8 @@ app.use((_req, res, next) => {
 app.get("/api/ping", (_req, res) => {
   res.status(200).send("pong");
 });
+
+app.use("/api/diagnoses", diagnosesRouter);
 
 const PORT = 3001;
 
