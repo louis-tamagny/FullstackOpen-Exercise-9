@@ -1,17 +1,25 @@
-import express from "express";
-import { addPatient, getSecuredPatients } from "../services/patientService";
-import { NewPatient } from "../types";
+import express from 'express';
+import { addPatient, getSecuredPatients } from '../services/patientService';
+import { NewPatient } from '../types';
+import { toNewPatient } from '../utils';
 
 const patientRouter = express.Router();
 
-patientRouter.get("/", (_req, res) => {
+patientRouter.get('/', (_req, res) => {
   res.status(200).send(getSecuredPatients());
 });
 
-patientRouter.post("/", (req, res) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const newPatient: NewPatient = req.body;
-  res.status(200).send(addPatient(newPatient));
+patientRouter.post('/', (req, res) => {
+  try {
+    const newPatient: NewPatient = toNewPatient(req.body);
+    res.status(200).send(addPatient(newPatient));
+  } catch (error: unknown) {
+    let errMessage = '';
+    if (error instanceof Error) {
+      errMessage = error.message;
+    }
+    res.status(400).send(errMessage);
+  }
 });
 
 export default patientRouter;
