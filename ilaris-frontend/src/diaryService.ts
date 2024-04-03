@@ -11,11 +11,17 @@ export const addNewDiary = async (
   weather: string,
   visibility: string,
 ) => {
-  const res = await axios.post('http://localhost:3000/api/diaries', {
-    date,
-    weather,
-    visibility,
-    comment,
-  });
-  return res.data;
+  try {
+    const res = await axios.post('http://localhost:3000/api/diaries', {
+      date,
+      weather,
+      visibility,
+      comment,
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data);
+    }
+  }
 };
