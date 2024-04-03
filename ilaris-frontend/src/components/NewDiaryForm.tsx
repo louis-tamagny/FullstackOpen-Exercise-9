@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DiaryEntry } from '../types';
+import { DiaryEntry, Visibility, Weather } from '../types';
 import { addNewDiary } from '../diaryService';
 
 interface newDiaryProps {
@@ -22,13 +22,12 @@ const NewDiaryForm = ({ setDiaries, diaries }: newDiaryProps) => {
       .then((data) => {
         setDate('');
         setComment('');
-        setVisibility('');
-        setWeather('');
         setDiaries(diaries.concat(data));
       })
       .catch((error) => {
         if (error instanceof Error) {
           setErrorMessage(error.message);
+          setInterval(() => setErrorMessage(''), 5000);
         }
       });
   };
@@ -40,26 +39,40 @@ const NewDiaryForm = ({ setDiaries, diaries }: newDiaryProps) => {
         <label htmlFor="date-input">date </label>
         <input
           id="date-input"
-          type="text"
+          type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         ></input>
         <br />
-        <label htmlFor="visibility-input">visibility </label>
-        <input
-          id="visibility-input"
-          type="dropdown"
-          value={visibility}
-          onChange={(e) => setVisibility(e.target.value)}
-        ></input>
+        visibility:
+        {Object.values(Visibility).map((v) => (
+          <>
+            <input
+              id={'visibility-input-' + v}
+              type="radio"
+              key={v}
+              name="visibility"
+              value={v}
+              onChange={(e) => setVisibility(e.target.value)}
+            />
+            <label htmlFor={'visibility-input-' + v}>{v}</label>
+          </>
+        ))}
         <br />
-        <label htmlFor="weather-input">weather </label>
-        <input
-          id="weather-input"
-          type="text"
-          value={weather}
-          onChange={(e) => setWeather(e.target.value)}
-        ></input>
+        weather:
+        {Object.values(Weather).map((v) => (
+          <>
+            <input
+              id={'weather-input-' + v}
+              type="radio"
+              key={v}
+              name="weather"
+              value={v}
+              onChange={(e) => setWeather(e.target.value)}
+            />
+            <label htmlFor={'weather-input-' + v}>{v}</label>
+          </>
+        ))}
         <br />
         <label htmlFor="comment-input">comment </label>
         <input
@@ -68,6 +81,7 @@ const NewDiaryForm = ({ setDiaries, diaries }: newDiaryProps) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         ></input>
+        <br />
         <button type="submit">add</button>
       </form>
     </div>
