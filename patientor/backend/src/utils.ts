@@ -67,6 +67,7 @@ const toNewPatient = (data: unknown): NewPatient => {
       dateOfBirth: parseDateOfBirth(data.dateOfBirth),
       occupation: parseOccupation(data.occupation),
       ssn: parseSsn(data.ssn),
+      entries: [],
     };
     return newPatient;
   }
