@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Gender, Patient } from '../../types';
+import { Diagnosis, Gender, Patient } from '../../types';
 import patientService from '../../services/patients';
+import diagnosesService from '../../services/diagnoses';
 import { useParams } from 'react-router-dom';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
@@ -17,6 +18,7 @@ const genderToIcon = (gender: Gender) => {
 
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient>();
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>();
   const patientId = useParams().id;
 
   useEffect(() => {
@@ -28,6 +30,14 @@ const PatientPage = () => {
       setPatientData(patientId);
     }
   }, [patientId]);
+
+  useEffect(() => {
+    const setDiagnosesData = async () => {
+      const diagnosesData = await diagnosesService.getDiagnoses();
+      setDiagnoses(diagnosesData);
+    };
+    setDiagnosesData();
+  }, []);
 
   return (
     <div>
@@ -49,7 +59,11 @@ const PatientPage = () => {
               <ul>
                 {entry.diagnosisCodes &&
                   entry.diagnosisCodes.map((code) => (
-                    <li key={code}>{code}</li>
+                    <li key={code}>
+                      {code}{' '}
+                      {typeof diagnoses !== 'undefined' &&
+                        diagnoses.find((diag) => diag.code === code)?.name}
+                    </li>
                   ))}
               </ul>
             </div>
